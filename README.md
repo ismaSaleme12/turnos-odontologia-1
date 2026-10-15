@@ -5,7 +5,7 @@ Argentina y Latinoamérica: agenda multi-profesional con anti-solapamiento,
 reserva online 24/7, historia clínica + odontograma FDI, caja/señas con
 Mercado Pago, obras sociales y recordatorios por WhatsApp.
 
-#Video explicativo:
+Video explicativo:
 https://youtu.be/1D0VbByXEnI
 
 ## Clonar
