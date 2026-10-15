@@ -41,7 +41,7 @@ include = ["app*"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["."]
-testpaths = ["../tests"]
+testpaths = ["../../tests"]
 python_files = ["test_*.py"]
 
 [tool.ruff]
@@ -50,6 +50,13 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ruff.lint.isort]
+# `app` y `alembic` son first-party explícitos: tras la mudanza a src/backend/
+# la detección automática de ruff varía según cwd/config-discovery y los
+# reclasificaba como third-party (I001 en alembic/* y tests/*). Fijarlos
+# preserva el orden de imports del archive sin tocar código.
+known-first-party = ["app", "alembic"]
 
 [tool.mypy]
 python_version = "3.12"

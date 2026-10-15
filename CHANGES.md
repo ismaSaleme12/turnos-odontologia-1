@@ -109,9 +109,9 @@ Paso │ Agente A (Backend Core) │ Agente B (Backend Aux)  │ Agente C (Diner
 ## FASE 0 — Cimientos
 
 ### [C-01] `foundation-setup`
-- **Estado**: `[x]` implementado en ciclo 1 — change `c-01-foundation-core-models` (archivada en `openspec/changes/archive/2026-10-03-c-01-foundation-core-models/`, specs en `openspec/specs/foundation-setup/spec.md`). Cubre C-01 + C-02 juntos.
+- **Estado**: `[x]` layout solo `src/backend/` + `src/frontend/` — change `c-01-solo-setup` (archivada en `openspec/changes/archive/2026-10-15-c-01-solo-setup/`, refactor puro sin deltas: `skip_specs: true`; specs vigentes en `openspec/specs/foundation-setup/spec.md`). Historia previa: `2026-10-03-c-01-foundation-core-models` (ciclo 1, cubría C-01 + C-02). Pendientes para CI (sin Docker local): 3.3 Alembic `upgrade head` + `downgrade -1` + `upgrade head` en contenedor fresco · 5.1 stack limpio `compose up --build` + migrar + seed + `GET /api/health` → 200 (11/13 tareas; resto en verde: pytest, tsc/build, ruff+mypy, CI 6 paths).
 - **Scope**: Scaffolding completo del monorepo + infraestructura base
-  - Estructura `src/app/{domain,application,infrastructure,api,workers}` + `tests/` + `src/src/{features,shared,pages}` según `08_arquitectura_propuesta.md` §Estructura (layout mudado: `src/` = ex `backend/`+`frontend/`, `tests/` = ex `backend/app/tests`)
+  - Estructura `src/backend/app/{domain,application,infrastructure,api,workers}` + `src/frontend/src/{features,shared,pages}` + `tests/` + `db/init/` en raíz según `08_arquitectura_propuesta.md` §Estructura (layout vigente: backend en `src/backend/`, frontend en `src/frontend/`)
   - `src/app/`: FastAPI app mínima con `GET /api/health`, SQLAlchemy + Alembic inicializado, `shared/` con settings (Pydantic), logger, db session, exceptions con mensajes en rioplatense (RN-GL-02)
   - `src/` (frontend): Vite + React + TypeScript + PWA base (manifest + service worker vacío), React Router, TanStack Query, Tailwind
   - `docker-compose.yml`: api + postgres + redis + worker (+ mailhog dev)
@@ -127,7 +127,7 @@ Paso │ Agente A (Backend Core) │ Agente B (Backend Aux)  │ Agente C (Diner
 ---
 
 ### [C-02] `core-models-multitenant`
-- **Estado**: `[x]` implementado en ciclo 1 — change `c-01-foundation-core-models` (archivada en `openspec/changes/archive/2026-10-03-c-01-foundation-core-models/`, specs en `openspec/specs/core-models-multitenant/spec.md`). Cubre C-01 + C-02 juntos.
+- **Estado**: `[ ]` pendiente — change activo `c-02-modelos-core` (ya propuesto, depende de C-01; NO aplicar hasta archivar C-01). Historia ciclo 1 en `openspec/changes/archive/2026-10-03-c-01-foundation-core-models/` queda como referencia (specs vigentes en `openspec/specs/core-models-multitenant/spec.md`), no como cierre.
 - **Seguimiento pendiente (4 tasks → verificar en CI/Docker)**: 1.4 `docker compose up --build` + health 200 · 2.4 permiso DB auditoría (UPDATE/DELETE rechazados) · 4.2 workflow CI (pytest + tsc/build) · 4.3 verificación integral del ciclo. Apply 10/14, Verify 22 passed/2 skipped (skips por diseño, corren en CI).
 - **Scope**: Entidades raíz multi-tenant + auditoría append-only + seed piloto
   - Modelos: `Tenant` (con `politicas` jsonb), `Usuario` (rol enum dueno/recepcion/odontologo, email único por tenant, matrícula obligatoria si odontólogo), `Auditoria` (solo INSERT+SELECT, retención 5 años)

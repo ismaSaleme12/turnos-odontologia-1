@@ -44,17 +44,17 @@ jobs:
         with:
           python-version: "3.12"
       - name: Instalar backend + dev
-        run: pip install -e "./src[dev]"
+        run: pip install -e "./src/backend[dev]"
       - name: Crear rol app restringido
         run: psql "postgresql://postgres:postgres@localhost:5432/turnos" -c "CREATE ROLE turnos_app WITH LOGIN PASSWORD 'turnos_app_ci';"
       - name: Migrar (001 con GRANTs D4)
-        working-directory: src
+        working-directory: src/backend
         run: alembic upgrade head
       - name: Lint + tipos
         run: |
-          ruff check --config src/pyproject.toml src tests
-          ruff format --check --config src/pyproject.toml src tests
-          mypy src/app src/alembic
+          ruff check --config src/backend/pyproject.toml src/backend tests
+          ruff format --check --config src/backend/pyproject.toml src/backend tests
+          mypy src/backend/app src/backend/alembic
       - name: Suite contra DB real (R11)
         run: python -m pytest tests -q -p no:cacheprovider
 
@@ -66,10 +66,10 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: src/package-lock.json
+          cache-dependency-path: src/frontend/package-lock.json
       - name: Instalar
-        working-directory: src
+        working-directory: src/frontend
         run: npm ci
       - name: Tipos + build
-        working-directory: src
+        working-directory: src/frontend
         run: npm run build

@@ -47,7 +47,7 @@ Fuente de verdad del dominio. Leer antes de proponer o implementar:
 | Diagnóstico | WhatsApp en producción | `observe-whatsapp` |
 | Calidad | Reviews HIGH/CRITICAL | `code-review` |
 
-> Los compact rules de cada skill los resuelve el orquestador desde `.atl/skill-registry.md` (generado por `skill-registry`; no versionado — no está en el repo).
+> Los compact rules de cada skill los resuelve el orquestador desde `.agents/skill-registry.md` (versionado en el repo, junto a las skills en `.agents/skills/`).
 
 ## Roadmap de Changes
 

@@ -11,9 +11,9 @@ import uuid
 from collections.abc import AsyncGenerator
 from pathlib import Path
 
-# El package `app` vive en src/ (repo mudado a layout src/ + tests/).
+# El package `app` vive en src/backend/ (layout src/backend/ + src/frontend/ + tests/).
 # Esto permite `pytest tests` desde la raíz sin instalación editable.
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src" / "backend"))
 
 import pytest
 import pytest_asyncio

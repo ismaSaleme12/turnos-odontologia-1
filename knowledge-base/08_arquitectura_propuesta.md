@@ -16,24 +16,26 @@
 
 ```
 turnos-odontologia/
-├── backend/
-│   └── app/
-│       ├── domain/            # entidades, máquinas de estado, reglas RN
-│       ├── application/       # casos de uso (reservar, confirmar, liquidar...)
-│       ├── infrastructure/    # db, repositories, mp_client, wa_client, mailer
-│       ├── api/               # routers REST + webhooks + auth JWT
-│       ├── workers/           # jobs Redis (mensajes, vencimientos, reintentos)
-│       └── tests/
-├── frontend/
-│   └── src/
-│       ├── features/          # agenda, reserva-publica, clinica, caja, os, config
-│       ├── shared/            # ui, api-client, auth, pwa
-│       └── pages/
+├── src/
+│   ├── backend/
+│   │   └── app/
+│   │       ├── domain/            # entidades, máquinas de estado, reglas RN
+│   │       ├── application/       # casos de uso (reservar, confirmar, liquidar...)
+│   │       ├── infrastructure/    # db, repositories, mp_client, wa_client, mailer
+│   │       ├── api/               # routers REST + webhooks + auth JWT
+│   │       └── workers/           # jobs Redis (mensajes, vencimientos, reintentos)
+│   └── frontend/
+│       └── src/
+│           ├── features/          # agenda, reserva-publica, clinica, caja, os, config
+│           ├── shared/            # ui, api-client, auth, pwa
+│           └── pages/
+├── tests/                   # suite pytest contra DB real
+├── db/init/                 # init de Postgres (rol `turnos_app` restringido)
 ├── docker-compose.yml         # api + postgres + redis + worker (+ mailhog dev)
 └── knowledge-base/            # este KB
 ```
 
-**Suposición:** esta estructura se ajusta al crear el repo; lo que no se negocia es la separación domain/application/infrastructure en backend.
+**Suposición:** esta estructura se ajusta al crear el repo; lo que no se negocia es la separación domain/application/infrastructure en backend. Layout vigente desde C-01 `c-01-solo-setup`: backend en `src/backend/`, frontend en `src/frontend/` (si un doc viejo menciona `backend/`+`frontend/` en raíz, leé `src/backend/`+`src/frontend/`; si menciona `src/app` plano, leé `src/backend/app/`).
 
 ## Seguridad
 

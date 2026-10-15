@@ -48,8 +48,8 @@ Servicios:
 | `mailhog` | Email transaccional en dev | :8025 (UI) / :1025 (SMTP) |
 
 > Estado del frontend: la PWA tiene imagen nginx lista en
-> `src/Dockerfile.frontend` (+ `src/nginx.conf`), pero el compose todavía no
-> declara ese servicio. Para desarrollo del front: `cd src && npm ci &&
+> `src/frontend/Dockerfile.frontend` (+ `src/frontend/nginx.conf`), pero el compose todavía no
+> declara ese servicio. Para desarrollo del front: `cd src/frontend && npm ci &&
 > npm run dev`.
 
 ## Migraciones y seed
@@ -58,7 +58,7 @@ Servicios:
 # Migraciones (servicio `migrar`, perfil tools)
 docker compose --profile tools run --rm migrar
 # Equivalente local:
-cd src && alembic upgrade head
+cd src/backend && alembic upgrade head
 ```
 
 La migración `001` crea `tenant`, `usuario` y `auditoria` (+ rol `turnos_app`
@@ -66,7 +66,7 @@ restringido: solo INSERT+SELECT en auditoría). El seed piloto es 100%
 ficticio (1 tenant + 1 Dueño + matriz de permisos base, idempotente):
 
 ```bash
-cd src && python -m app.infrastructure.seed
+cd src/backend && python -m app.infrastructure.seed
 ```
 
 ## Correr tests
@@ -77,18 +77,18 @@ Backend con **DB real en contenedor, sin mocks de DB** (R11):
 python -m pytest tests -q
 ```
 
-Frontend (tipos + build, desde `src/`):
+Frontend (tipos + build, desde `src/frontend/`):
 
 ```bash
-cd src && npm ci && npm run build
+cd src/frontend && npm ci && npm run build
 ```
 
 Lint + tipos (mismos comandos que CI):
 
 ```bash
-ruff check --config src/pyproject.toml src tests
-ruff format --check --config src/pyproject.toml src tests
-mypy src/app src/alembic
+ruff check --config src/backend/pyproject.toml src/backend tests
+ruff format --check --config src/backend/pyproject.toml src/backend tests
+mypy src/backend/app src/backend/alembic
 ```
 
 ## Health check
@@ -105,15 +105,16 @@ curl http://localhost:8000/api/health
 
 ```text
 src/                  Código (backend + frontend)
-  app/                FastAPI: api/ (routers+schemas), domain/ (Tenant, Usuario,
-                      Auditoria, mixins), application/, infrastructure/ (db, seed),
-                      shared/ (settings, db session, logging, exceptions), workers/
-  alembic/            Migraciones (001: tenant, usuario, auditoria)
-  src/                React + TS PWA (features/, shared/, pages/)
-  public/             Assets PWA (manifest, íconos)
-  Dockerfile / Dockerfile.frontend / nginx.conf
-  package.json / vite.config.ts / tsconfig.json / tailwind.config.js
-  pyproject.toml / alembic.ini / index.html
+  backend/            FastAPI: app/ (api/ routers+schemas, domain/ Tenant, Usuario,
+                      Auditoria, mixins, application/, infrastructure/ db+seed,
+                      shared/ settings+db session+logging+exceptions, workers/),
+                      alembic/ (001: tenant, usuario, auditoria),
+                      pyproject.toml / alembic.ini / Dockerfile / .dockerignore
+  frontend/           React + TS PWA (src/: features/, shared/, pages/),
+                      public/ (assets PWA: manifest, íconos),
+                      Dockerfile.frontend / nginx.conf,
+                      package.json / vite.config.ts / tsconfig.json / tailwind.config.js /
+                      postcss.config.js / index.html
 tests/                Suite pytest contra DB real (conftest + 7 módulos test_*)
 db/init/              Rol `turnos_app` restringido (init de Postgres)
 docker-compose.yml    api + postgres + redis + worker + migrar + mailhog
@@ -128,10 +129,10 @@ AGENTS.md / CLAUDE.md Reglas del proyecto para agentes
 pytest.ini / .env.example / .github/workflows/ci.yml
 ```
 
-> **Nota de equivalencia:** `src/` = ex `backend/` + `frontend/` y `tests/` =
-> ex `backend/app/tests`, tras la mudanza al layout actual. Si un doc viejo
-> menciona `backend/` o `frontend/`, leé `src/`; si menciona
-> `backend/app/tests`, leé `tests/`.
+> **Nota de equivalencia:** layout vigente `src/backend/` + `src/frontend/` (tras
+> `c-01-solo-setup`). Si un doc viejo menciona `backend/` o `frontend/` en raíz,
+> leé `src/backend/` / `src/frontend/`; si menciona `src/app` plano, leé
+> `src/backend/app/`; si menciona `backend/app/tests`, leé `tests/`.
 
 ## Nota CI
 
