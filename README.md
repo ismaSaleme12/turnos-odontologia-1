@@ -6,7 +6,7 @@ reserva online 24/7, historia clínica + odontograma FDI, caja/señas con
 Mercado Pago, obras sociales y recordatorios por WhatsApp.
 
 Video explicativo:
-https://youtu.be/1D0VbByXEnI
+https://www.youtube.com/watch?v=sK8yQHpTE8E
 
 ## Clonar
 
